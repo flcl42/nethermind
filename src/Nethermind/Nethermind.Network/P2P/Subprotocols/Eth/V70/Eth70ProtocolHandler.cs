@@ -117,7 +117,7 @@ public class Eth70ProtocolHandler : Eth69ProtocolHandler
                 taken++;
                 sizeEstimate += MessageSizeEstimator.EstimateSize(receipts[receiptIndex]);
 
-                if (sizeEstimate > SoftOutgoingMessageSizeLimit || cancellationToken.IsCancellationRequested)
+                if (sizeEstimate > HardOutgoingMessageSizeLimit || cancellationToken.IsCancellationRequested)
                 {
                     lastBlockIncomplete = receiptIndex < receipts.Length - 1 || cancellationToken.IsCancellationRequested;
                     break;
@@ -128,7 +128,7 @@ public class Eth70ProtocolHandler : Eth69ProtocolHandler
             Array.Copy(receipts, startIndex, truncated, 0, taken);
             txReceipts.Add(truncated);
 
-            if (lastBlockIncomplete || sizeEstimate > SoftOutgoingMessageSizeLimit || cancellationToken.IsCancellationRequested)
+            if (lastBlockIncomplete || sizeEstimate > HardOutgoingMessageSizeLimit || cancellationToken.IsCancellationRequested)
             {
                 break;
             }
@@ -176,6 +176,8 @@ public class Eth70ProtocolHandler : Eth69ProtocolHandler
                 using (response)
                 {
                     totalResponseSize += size;
+
+                    Logger.Warn($"Size: {size}/{totalResponseSize}");
 
                     if (response.EthMessage.TxReceipts.Count == 0)
                     {
@@ -299,9 +301,14 @@ public class Eth70ProtocolHandler : Eth69ProtocolHandler
 
     private static void ValidateBlockReceipts(TxReceipt[] blockReceipts, long expectedGasUsed, int firstReceiptIndex, bool isCompleteSegment)
     {
-        if (blockReceipts.Length == 0)
+        if (blockReceipts is null or { Length: 0 })
         {
-            throw new SubprotocolException("Empty receipt block payload");
+            if ((firstReceiptIndex != 0 || !isCompleteSegment))
+            {
+                throw new SubprotocolException("Unexpected empty receipt block payload");
+            }
+
+            return;
         }
 
         long prevCumulative = firstReceiptIndex == 0 ? 0 : blockReceipts[0].GasUsedTotal;

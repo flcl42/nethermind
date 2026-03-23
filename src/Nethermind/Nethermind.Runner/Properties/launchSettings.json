@@ -37,7 +37,7 @@
     },
     "Hoodi": {
       "commandName": "Project",
-      "commandLineArgs": "-c hoodi --data-dir .data",
+      "commandLineArgs": "-c hoodi --data-dir .data --log=DEBUG",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

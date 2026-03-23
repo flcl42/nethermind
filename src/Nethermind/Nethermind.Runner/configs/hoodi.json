@@ -2,9 +2,9 @@
   "$schema": "https://raw.githubusercontent.com/NethermindEth/core-scripts/refs/heads/main/schemas/config.json",
   "Init": {
     "ChainSpecPath": "chainspec/hoodi.json",
-    "GenesisHash": "0xbbe312868b376a3001692a646dd2d7d1e4406380dfd86b98aa8a34d1557c971b",
-    "BaseDbPath": "nethermind_db/hoodi",
-    "LogFileName": "hoodi.log"
+    "BaseDbPath": "D:/tmp/eth70db/005",
+    "LogFileName": "hoodi.log",
+    "DiscoveryEnabled": false
   },
   "TxPool": {
     "Size": 1024
@@ -27,9 +27,13 @@
     "Port": 8545,
     "EngineHost": "127.0.0.1",
     "EnginePort": 8551,
-    "EngineEnabledModules": "net,eth,subscribe,engine,web3,client,flashbots"
+    "EngineEnabledModules": "net,eth,subscribe,engine,web3,client,flashbots",
+    "UnsecureDevNoRpcAuthentication":  true
   },
   "Merge": {
     "Enabled": true
+  },
+  "Discovery": {
+    "Bootnodes": "enode://f6ec3b9b79d9e02ec411f3af05d64c5a592c472dda0e93e6b47408c6a4d5f41eef734032821056ce74918bdba70c94460963df0c55866d09a7a34b1ac03064e4@46.225.120.62:30303,enode://8caf0ce1a890ad88ba9ef3ff5e4bf7d0d69eb366bd1d4ffb5049badce24d986da2945e738d6a648d3d51e8f09621946b63f0dd9ac0259291febb4f799503c702@46.225.125.150:30303"
   }
 }
